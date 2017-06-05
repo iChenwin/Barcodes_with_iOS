@@ -12,7 +12,12 @@
 
 @end
 
-@implementation CWCameraPreviewController
+@implementation CWCameraPreviewController {
+    AVCaptureDevice *_camera;
+    AVCaptureDeviceInput *_videoInput;
+    AVCapturePhotoOutput *_imageOutput;
+    AVCaptureSession *_captureSession;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -23,6 +28,18 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)switchCam:(id)sender {
+    NSLog(@"switch Camera");
+}
+
+- (IBAction)snap:(id)sender {
+    NSLog(@"snap!");
+}
+
+- (IBAction)toggleTorch:(id)sender {
+    NSLog(@"torch");
 }
 
 
