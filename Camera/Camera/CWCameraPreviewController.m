@@ -42,5 +42,22 @@
     NSLog(@"torch");
 }
 
-
+- (void)_setupCamera {
+    _camera = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
+    NSError *error;
+    _videoInput = [[AVCaptureDeviceInput alloc] initWithDevice:_camera error:&error];
+    
+    if(!_videoInput) {
+        NSLog(@"error connectiong video input: %@", [error localizedDescription]);
+        return;
+    }
+    
+    _captureSession = [[AVCaptureSession alloc] init];
+    if (![_captureSession canAddInput:_videoInput]) {
+        NSLog(@"Unable to add video input to capture session");
+        return;
+    }
+    [_captureSession addInput:_videoInput];
+}
 @end

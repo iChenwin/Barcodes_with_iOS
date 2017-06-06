@@ -14,6 +14,7 @@
 		B0DB024F1EE54B87005C2F2C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0DB024E1EE54B87005C2F2C /* Assets.xcassets */; };
 		B0DB02521EE54B87005C2F2C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0DB02501EE54B87005C2F2C /* LaunchScreen.storyboard */; };
 		B0DB025B1EE54BEB005C2F2C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0DB025A1EE54BEB005C2F2C /* AVFoundation.framework */; };
+		B0E59D211EE695CD00DECEB3 /* CWVideoPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E59D201EE695CD00DECEB3 /* CWVideoPreviewView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,8 @@
 		B0DB02531EE54B87005C2F2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B0DB025A1EE54BEB005C2F2C /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		B0DB025C1EE54E17005C2F2C /* Camera-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Camera-Prefix.pch"; sourceTree = "<group>"; };
+		B0E59D1F1EE695CD00DECEB3 /* CWVideoPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWVideoPreviewView.h; sourceTree = "<group>"; };
+		B0E59D201EE695CD00DECEB3 /* CWVideoPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWVideoPreviewView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +70,8 @@
 				B0DB02461EE54B87005C2F2C /* AppDelegate.m */,
 				B0DB02481EE54B87005C2F2C /* CWCameraPreviewController.h */,
 				B0DB02491EE54B87005C2F2C /* CWCameraPreviewController.m */,
+				B0E59D1F1EE695CD00DECEB3 /* CWVideoPreviewView.h */,
+				B0E59D201EE695CD00DECEB3 /* CWVideoPreviewView.m */,
 				B0DB024B1EE54B87005C2F2C /* Main.storyboard */,
 				B0DB024E1EE54B87005C2F2C /* Assets.xcassets */,
 				B0DB02501EE54B87005C2F2C /* LaunchScreen.storyboard */,
@@ -166,6 +171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0DB024A1EE54B87005C2F2C /* CWCameraPreviewController.m in Sources */,
+				B0E59D211EE695CD00DECEB3 /* CWVideoPreviewView.m in Sources */,
 				B0DB02471EE54B87005C2F2C /* AppDelegate.m in Sources */,
 				B0DB02441EE54B87005C2F2C /* main.m in Sources */,
 			);
@@ -330,6 +336,7 @@
 				B0DB02581EE54B87005C2F2C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
