@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B0394BFF1EE7E104001A009B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B0394BFE1EE7E104001A009B /* Default-568h@2x.png */; };
 		B0DB02441EE54B87005C2F2C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B0DB02431EE54B87005C2F2C /* main.m */; };
 		B0DB02471EE54B87005C2F2C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B0DB02461EE54B87005C2F2C /* AppDelegate.m */; };
 		B0DB024A1EE54B87005C2F2C /* CWCameraPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0DB02491EE54B87005C2F2C /* CWCameraPreviewController.m */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B0394BFE1EE7E104001A009B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		B0DB023F1EE54B87005C2F2C /* Camera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Camera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0DB02431EE54B87005C2F2C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B0DB02451EE54B87005C2F2C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -49,6 +51,7 @@
 		B0DB02361EE54B87005C2F2C = {
 			isa = PBXGroup;
 			children = (
+				B0394BFE1EE7E104001A009B /* Default-568h@2x.png */,
 				B0DB02411EE54B87005C2F2C /* Camera */,
 				B0DB02401EE54B87005C2F2C /* Products */,
 				B0DB02591EE54BEB005C2F2C /* Frameworks */,
@@ -158,6 +161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0DB02521EE54B87005C2F2C /* LaunchScreen.storyboard in Resources */,
+				B0394BFF1EE7E104001A009B /* Default-568h@2x.png in Resources */,
 				B0DB024F1EE54B87005C2F2C /* Assets.xcassets in Resources */,
 				B0DB024D1EE54B87005C2F2C /* Main.storyboard in Resources */,
 			);

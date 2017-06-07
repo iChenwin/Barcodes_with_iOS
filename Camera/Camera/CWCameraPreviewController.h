@@ -10,6 +10,10 @@
 
 @interface CWCameraPreviewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UIButton *switchCamButton;
+@property (weak, nonatomic) IBOutlet UIButton *snapButton;
+@property (weak, nonatomic) IBOutlet UIButton *toggleTorchButton;
+@property (weak, nonatomic) IBOutlet UIImageView *previewImage;
 
 @end
 
