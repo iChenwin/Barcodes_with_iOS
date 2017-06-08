@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@class CWCameraPreviewController;
+
+@protocol CWCameraPreviewControllerDelegate <NSObject>
+
+@optional
+- (void)previewController:(CWCameraPreviewController *)previewController
+              didScanCode:(NSString *)code
+                   ofType:(NSString *)type;
+@end
+
 @interface CWCameraPreviewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UIButton *switchCamButton;
@@ -15,6 +25,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *toggleTorchButton;
 @property (weak, nonatomic) IBOutlet UIImageView *previewImage;
 @property (weak, nonatomic) IBOutlet UIView *preview;
-
+@property (weak, nonatomic) IBOutlet id <CWCameraPreviewControllerDelegate> delegate;
 @end
 
