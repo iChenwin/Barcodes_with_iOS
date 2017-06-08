@@ -72,33 +72,48 @@
                                     <constraint firstItem="Yx8-My-zsW" firstAttribute="top" secondItem="uRc-a4-Ild" secondAttribute="top" id="pwu-p1-NI0"/>
                                 </constraints>
                             </view>
-                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7NG-vc-CJe">
+                            <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yUz-a1-DgQ" userLabel="preview">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4jk-Ez-0Sa">
-                                <rect key="frame" x="322" y="28" width="37" height="30"/>
-                                <state key="normal" title="Done"/>
-                            </button>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9rW-jv-L7g">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9dP-fR-JlO">
+                                        <rect key="frame" x="330" y="20" width="37" height="30"/>
+                                        <state key="normal" title="Done"/>
+                                        <connections>
+                                            <action selector="previewDone:" destination="BYZ-38-t0r" eventType="touchUpInside" id="y5V-S1-BHl"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="9dP-fR-JlO" firstAttribute="top" secondItem="yUz-a1-DgQ" secondAttribute="top" constant="20" id="8oO-Rp-mqd"/>
+                                    <constraint firstItem="9rW-jv-L7g" firstAttribute="top" secondItem="yUz-a1-DgQ" secondAttribute="top" id="J2e-eG-zvh"/>
+                                    <constraint firstAttribute="bottom" secondItem="9rW-jv-L7g" secondAttribute="bottom" id="YM5-bm-0yp"/>
+                                    <constraint firstAttribute="trailing" secondItem="9rW-jv-L7g" secondAttribute="trailing" id="cJE-bu-rvI"/>
+                                    <constraint firstItem="9rW-jv-L7g" firstAttribute="leading" secondItem="yUz-a1-DgQ" secondAttribute="leading" id="eOe-0d-Txt"/>
+                                    <constraint firstAttribute="trailing" secondItem="9dP-fR-JlO" secondAttribute="trailing" constant="8" id="vfx-cp-Pzm"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="4jk-Ez-0Sa" secondAttribute="trailing" constant="16" id="9Re-Uc-ykY"/>
                             <constraint firstAttribute="bottom" secondItem="uRc-a4-Ild" secondAttribute="bottom" id="Apy-xH-dim"/>
-                            <constraint firstAttribute="trailing" secondItem="7NG-vc-CJe" secondAttribute="trailing" id="IHp-Me-t9j"/>
                             <constraint firstItem="ILK-Nl-Uy9" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="IJk-Oj-ptQ"/>
                             <constraint firstAttribute="trailing" secondItem="uRc-a4-Ild" secondAttribute="trailing" id="IT8-2r-GcS"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="yUz-a1-DgQ" secondAttribute="bottom" id="NTw-QF-1Kh"/>
+                            <constraint firstItem="yUz-a1-DgQ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="WDH-Ig-ZxK"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="ILK-Nl-Uy9" secondAttribute="bottom" id="dV9-FF-mxM"/>
+                            <constraint firstAttribute="trailing" secondItem="yUz-a1-DgQ" secondAttribute="trailing" id="dg2-A2-6AW"/>
                             <constraint firstAttribute="trailing" secondItem="ILK-Nl-Uy9" secondAttribute="trailing" id="hl7-Gd-Ld8"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="7NG-vc-CJe" secondAttribute="bottom" id="nYc-HO-06g"/>
+                            <constraint firstItem="yUz-a1-DgQ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="kra-1i-lBM"/>
                             <constraint firstItem="uRc-a4-Ild" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="oYh-XC-WgP"/>
-                            <constraint firstItem="7NG-vc-CJe" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="r7k-E1-3aQ"/>
-                            <constraint firstItem="7NG-vc-CJe" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="rIx-H2-1NX"/>
-                            <constraint firstItem="4jk-Ez-0Sa" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="zY9-lt-ZbE"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="previewDone" destination="4jk-Ez-0Sa" id="BfH-Yt-gWK"/>
-                        <outlet property="previewImage" destination="7NG-vc-CJe" id="B4V-sj-F0X"/>
+                        <outlet property="preview" destination="yUz-a1-DgQ" id="2Ad-U1-u1q"/>
+                        <outlet property="previewImage" destination="9rW-jv-L7g" id="H6Q-0K-LPh"/>
                         <outlet property="snapButton" destination="J25-sh-4ss" id="eil-Ip-Lh2"/>
                         <outlet property="switchCamButton" destination="I5r-mx-xRT" id="SL7-Ov-WN0"/>
                         <outlet property="toggleTorchButton" destination="Yx8-My-zsW" id="EHO-TY-EKV"/>

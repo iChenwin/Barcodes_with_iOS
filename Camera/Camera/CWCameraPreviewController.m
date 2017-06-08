@@ -32,6 +32,17 @@
     _videoPreview = (CWVideoPreviewView *)self.view;
     [self _setupCamera];
     _videoPreview.previewLayer.session = _captureSession;
+    
+    [self _setupCameraAfterCheckingAuthorization];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    [self.view addGestureRecognizer:tap];
+    
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self
+               selector:@selector(subjectChanged:)
+                   name:AVCaptureDeviceSubjectAreaDidChangeNotification
+                 object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -51,6 +62,7 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark button action
 - (IBAction)switchCam:(id)sender {
     [_captureSession beginConfiguration];
     
@@ -80,7 +92,7 @@
     }
     
 //    AVCaptureConnection *videoConnection = [self _captureConnection];
-//    
+//
 //    if (!videoConnection) {
 //        NSLog(@"Error:No Video connection found on still image output");
 //    }
@@ -90,6 +102,30 @@
     photoSettings.previewPhotoFormat = previewDict;
     [_imageOutput capturePhotoWithSettings:photoSettings delegate:self];
     
+}
+
+- (IBAction)toggleTorch:(id)sender {
+    if ([_camera hasTorch]) {
+        BOOL torchActive = [_camera isTorchActive];
+        
+        if ([_camera lockForConfiguration:nil]) {
+            if (torchActive) {
+                if ([_camera isTorchModeSupported:AVCaptureTorchModeOff]) {
+                    [_camera setTorchMode:AVCaptureTorchModeOff];
+                }
+            } else {
+                if ([_camera isTorchModeSupported:AVCaptureTorchModeOn]) {
+                    [_camera setTorchMode:AVCaptureTorchModeOn];
+                }
+            }
+            
+            [_camera unlockForConfiguration];
+        }
+    }
+}
+
+- (IBAction)previewDone:(id)sender {
+    self.preview.alpha = 0;
 }
 
 - (void)_setupCamSwitchButton {
@@ -117,6 +153,13 @@
         self.switchCamButton.hidden = YES;
     }
 }
+- (void)_setupTorchToggleButton {
+    if ([_camera hasTorch]) {
+        self.toggleTorchButton.hidden = NO;
+    } else {
+        self.toggleTorchButton.hidden = YES;
+    }
+}
 
 - (void)captureOutput:(AVCapturePhotoOutput *)captureOutput didFinishProcessingPhotoSampleBuffer:(CMSampleBufferRef)photoSampleBuffer previewPhotoSampleBuffer:(CMSampleBufferRef)previewPhotoSampleBuffer resolvedSettings:(AVCaptureResolvedPhotoSettings *)resolvedSettings bracketSettings:(AVCaptureBracketedStillImageSettings *)bracketSettings error:(NSError *)error {
     if (error) {
@@ -127,41 +170,13 @@
         NSData *data = [AVCapturePhotoOutput JPEGPhotoDataRepresentationForJPEGSampleBuffer:photoSampleBuffer previewPhotoSampleBuffer:previewPhotoSampleBuffer];
         UIImage *image = [UIImage imageWithData:data];
         self.previewImage.image = image;
-        self.previewImage.hidden = NO;
+        self.preview.alpha = 1.0;
 //        UIViewController *previewVC = [[UIViewController alloc] init];
 //        UIImageView *previewImage = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
 //        previewImage.image = image;
 //        [previewVC.view addSubview:previewImage];
 //        [self.navigationController pushViewController:previewVC animated:YES];
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
-    }
-}
-
-- (IBAction)toggleTorch:(id)sender {
-    if ([_camera hasTorch]) {
-        BOOL torchActive = [_camera isTorchActive];
-        
-        if ([_camera lockForConfiguration:nil]) {
-            if (torchActive) {
-                if ([_camera isTorchModeSupported:AVCaptureTorchModeOff]) {
-                    [_camera setTorchMode:AVCaptureTorchModeOff];
-                }
-            } else {
-                if ([_camera isTorchModeSupported:AVCaptureTorchModeOn]) {
-                    [_camera setTorchMode:AVCaptureTorchModeOn];
-                }
-            }
-            
-            [_camera unlockForConfiguration];
-        }
-    }
-}
-
-- (void)_setupTorchToggleButton {
-    if ([_camera hasTorch]) {
-        self.toggleTorchButton.hidden = NO;
-    } else {
-        self.toggleTorchButton.hidden = YES;
     }
 }
 
@@ -201,6 +216,40 @@
     [_captureSession addOutput:_imageOutput];
     
     _videoPreview.previewLayer.session = _captureSession;
+}
+
+- (void)subjectChanged:(NSNotification *)notification {
+    if (_camera.focusMode == AVCaptureFocusModeLocked) {
+        if ([_camera isFocusPointOfInterestSupported]) {
+            _camera.focusPointOfInterest = CGPointMake(0.5, 0.5);
+        }
+        
+        if ([_camera isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus]) {
+            [_camera setFocusMode:AVCaptureFocusModeContinuousAutoFocus];
+        }
+        
+        NSLog(@"Focus Mode: Continuous");
+    }
+}
+- (void)handleTap:(UIGestureRecognizer *)gesture {
+    if (gesture.state == UIGestureRecognizerStateRecognized) {
+        if (![_camera isFocusPointOfInterestSupported] || ![_camera isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+            NSLog(@"Focus Point Not Supported by current camera");
+            return;
+        }
+    }
+    
+    CGPoint locationInPreview = [gesture locationInView:_videoPreview];
+    CGPoint locationInCapture = [_videoPreview.previewLayer captureDevicePointOfInterestForPoint:locationInPreview];
+    
+    if ([_camera lockForConfiguration:nil]) {
+        [_camera setFocusPointOfInterest:locationInCapture];
+        [_camera setFocusMode:AVCaptureFocusModeAutoFocus];
+        
+        NSLog(@"Focus Mode: Locked to Focus Point");
+        
+        [_camera unlockForConfiguration];
+    }
 }
 
 - (AVCaptureDevice *)_alternativeCamToCurrent {
@@ -300,6 +349,16 @@
     
 }
 
+- (void)_configureCurrentCamera {
+    if ([_camera isFocusModeSupported:AVCaptureFocusModeLocked]) {
+        if ([_camera lockForConfiguration:nil]) {
+            _camera.subjectAreaChangeMonitoringEnabled = YES;
+            
+            [_camera unlockForConfiguration];
+        }
+    }
+}
+
 AVCaptureVideoOrientation CWAVCaptureVideoOrientationForUIInterfaceOrientation(UIInterfaceOrientation interfaceOrientation) {
     switch (interfaceOrientation) {
         case UIInterfaceOrientationLandscapeLeft:
@@ -315,5 +374,9 @@ AVCaptureVideoOrientation CWAVCaptureVideoOrientationForUIInterfaceOrientation(U
         case UIInterfaceOrientationPortraitUpsideDown:
             return AVCaptureVideoOrientationPortraitUpsideDown;
     }
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 @end

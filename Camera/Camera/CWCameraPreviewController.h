@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *snapButton;
 @property (weak, nonatomic) IBOutlet UIButton *toggleTorchButton;
 @property (weak, nonatomic) IBOutlet UIImageView *previewImage;
+@property (weak, nonatomic) IBOutlet UIView *preview;
 
 @end
 
