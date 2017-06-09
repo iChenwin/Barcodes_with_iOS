@@ -21,6 +21,24 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="90X-So-6hm" customClass="CWVideoPreviewInterestBox">
+                                <rect key="frame" x="87" y="82" width="200" height="200"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scan Barcode Here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f2l-xs-uW4">
+                                        <rect key="frame" x="26.5" y="174" width="147.5" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.99079865219999996" green="0.24648666380000001" blue="0.50167006250000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="7ou-bM-rKL"/>
+                                    <constraint firstAttribute="width" constant="200" id="HT2-5I-Csk"/>
+                                    <constraint firstItem="f2l-xs-uW4" firstAttribute="centerX" secondItem="90X-So-6hm" secondAttribute="centerX" id="L8c-zg-PkJ"/>
+                                    <constraint firstAttribute="bottom" secondItem="f2l-xs-uW4" secondAttribute="bottom" constant="5" id="zQ8-Oj-eAv"/>
+                                </constraints>
+                            </view>
                             <view alpha="0.20000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ILK-Nl-Uy9" userLabel="BackgroundView">
                                 <rect key="frame" x="0.0" y="607" width="375" height="60"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -102,6 +120,7 @@
                             <constraint firstAttribute="bottom" secondItem="uRc-a4-Ild" secondAttribute="bottom" id="Apy-xH-dim"/>
                             <constraint firstItem="ILK-Nl-Uy9" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="IJk-Oj-ptQ"/>
                             <constraint firstAttribute="trailing" secondItem="uRc-a4-Ild" secondAttribute="trailing" id="IT8-2r-GcS"/>
+                            <constraint firstItem="90X-So-6hm" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="JmU-kw-RIx"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="yUz-a1-DgQ" secondAttribute="bottom" id="NTw-QF-1Kh"/>
                             <constraint firstItem="yUz-a1-DgQ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="WDH-Ig-ZxK"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="ILK-Nl-Uy9" secondAttribute="bottom" id="dV9-FF-mxM"/>
@@ -109,9 +128,11 @@
                             <constraint firstAttribute="trailing" secondItem="ILK-Nl-Uy9" secondAttribute="trailing" id="hl7-Gd-Ld8"/>
                             <constraint firstItem="yUz-a1-DgQ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="kra-1i-lBM"/>
                             <constraint firstItem="uRc-a4-Ild" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="oYh-XC-WgP"/>
+                            <constraint firstItem="90X-So-6hm" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="62" id="rMt-1C-MaG"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="_iBox" destination="9rW-jv-L7g" id="sZE-q3-jbb"/>
                         <outlet property="preview" destination="yUz-a1-DgQ" id="2Ad-U1-u1q"/>
                         <outlet property="previewImage" destination="9rW-jv-L7g" id="H6Q-0K-LPh"/>
                         <outlet property="snapButton" destination="J25-sh-4ss" id="eil-Ip-Lh2"/>

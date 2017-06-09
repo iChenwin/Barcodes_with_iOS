@@ -8,20 +8,24 @@
 
 #import "CWCameraPreviewController.h"
 #import "CWVideoPreviewView.h"
+#import "CWAVFoundationFunctions.h"
 
 @interface CWCameraPreviewController () <AVCapturePhotoCaptureDelegate, AVCaptureMetadataOutputObjectsDelegate>
 
 @end
 
 @implementation CWCameraPreviewController {
-    AVCaptureDevice *_camera;
-    AVCaptureDeviceInput *_videoInput;
-    AVCapturePhotoOutput *_imageOutput;
-    AVCaptureSession *_captureSession;
-    CWVideoPreviewView *_videoPreview;
+    AVCaptureDevice         *_camera;
+    AVCaptureDeviceInput    *_videoInput;
+    AVCapturePhotoOutput    *_imageOutput;
+    AVCaptureSession        *_captureSession;
+    CWVideoPreviewView      *_videoPreview;
     AVCaptureMetadataOutput *_metaDataOutput;
-    dispatch_queue_t _metaDataQueue;
-    NSMutableSet *_visibleCodes;
+    dispatch_queue_t        _metaDataQueue;
+    NSMutableSet            *_visibleCodes;
+    NSMutableDictionary     *_visibleShapes;
+    
+    __weak IBOutlet UIImageView *_iBox;
 }
 
 - (void)viewDidLoad {
@@ -51,7 +55,17 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    // need to update capture and preview connections
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    [self _updateConnectionsForInterfaceOrientation:orientation];
+    
     [_captureSession startRunning];
+    
+    [self _setupCamSwitchButton];
+    [self _setupTorchToggleButton];
+    
+    _visibleCodes = [NSMutableSet new];
+    _visibleShapes = [NSMutableDictionary new];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -60,12 +74,18 @@
     [_captureSession stopRunning];
 }
 
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
+    [self _updateMetadataRectOfInterest];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark button action and setups
+#pragma mark - button action and setups
 - (IBAction)switchCam:(id)sender {
     [_captureSession beginConfiguration];
     
@@ -283,7 +303,7 @@
     }
 }
 
-#pragma mark autoFocus
+#pragma mark - autoFocus
 - (void)subjectChanged:(NSNotification *)notification {
     if (_camera.focusMode == AVCaptureFocusModeLocked) {
         if ([_camera isFocusPointOfInterestSupported]) {
@@ -318,7 +338,7 @@
     }
 }
 
-#pragma mark metadata output
+#pragma mark - metadata output
 //create a barcode scanner and configure it to look for specific types of barcodes.
 - (void)_setupMetadataOutput {
     _metaDataOutput = [[AVCaptureMetadataOutput alloc] init];
@@ -335,8 +355,7 @@
     
     NSArray *barcodes2D = @[AVMetadataObjectTypePDF417Code,
                             AVMetadataObjectTypeQRCode,
-                            AVMetadataObjectTypeAztecCode,
-                            AVMetadataObjectTypeFace];
+                            AVMetadataObjectTypeAztecCode];
     NSArray *availableTypes = [_metaDataOutput availableMetadataObjectTypes];
     
     if (![availableTypes count]) {
@@ -377,7 +396,7 @@
     NSMutableDictionary *repCount = [NSMutableDictionary dictionary];
     
     for (AVMetadataMachineReadableCodeObject *obj in metadataObjects) {
-        if ([obj isKindOfClass:[AVMetadataMachineReadableCodeObject class]]) {
+        if ([obj isKindOfClass:[AVMetadataMachineReadableCodeObject class]] && obj.stringValue) {
             NSString *code = [NSString stringWithFormat:@"%@:%@", obj.type, obj.stringValue];
             
             NSUInteger occurencesOfCode = [repCount[code] unsignedIntegerValue] + 1;
@@ -393,19 +412,56 @@
             }
             
             [reportedCodes addObject:numberedCode];
+            
+            //Marking detected barcodes on preview
+            CGPathRef path = CWAVMetadataMachineReadableCodeObjectCreatePathForCorners(_videoPreview.previewLayer, obj);
+            
+            CAShapeLayer *shapeLayer = _visibleShapes[numberedCode];
+            
+            if (!shapeLayer) {
+                shapeLayer = [CAShapeLayer layer];
+                shapeLayer.strokeColor = [UIColor greenColor].CGColor;
+                shapeLayer.fillColor   = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.25].CGColor;
+                
+                shapeLayer.lineWidth = 2;
+                
+                [_videoPreview.layer addSublayer:shapeLayer];
+                _visibleShapes[numberedCode] = shapeLayer;
+            }
+            
+            shapeLayer.frame = _videoPreview.bounds;
+            shapeLayer.path  = path;
+            
+            CGPathRelease(path);
+        } else if ([obj isKindOfClass:[AVMetadataFaceObject class]]) {
+            NSLog(@"Face detection marking not implemented");
         }
     }
     
+    NSLog(@"visibleCodes:%@, reportedCodes:%@", _visibleCodes, reportedCodes);
     for (NSString *oneCode in _visibleCodes) {
         if (![reportedCodes containsObject:oneCode]) {
             NSLog(@"code disappeared: %@", oneCode);
+            
+            CAShapeLayer *shape = _visibleShapes[oneCode];
+            [shape removeFromSuperlayer];
+            [_visibleShapes removeObjectForKey:oneCode];
         }
     }
     
     _visibleCodes = reportedCodes;
 }
-
-#pragma mark alert
+- (void)_updateMetadataRectOfInterest {
+    if (!_captureSession.isRunning) {
+        NSLog(@"Capture Session is not running yet,"\
+              @"so we wouldn't get a useful rect of interest");
+        return;
+    }
+    
+    CGRect rectOfInterest = [_videoPreview.previewLayer metadataOutputRectOfInterestForRect:_iBox.frame];
+    _metaDataOutput.rectOfInterest = rectOfInterest;
+}
+#pragma mark - alert
 - (void)_informUserAboutCanNotAuthorized {
     UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:@"未获取相机权限" message:@"请允许相继访问" preferredStyle:UIAlertControllerStyleAlert];
     [self presentViewController:alertVC animated:YES completion:nil];
@@ -446,23 +502,6 @@
             
             [_camera unlockForConfiguration];
         }
-    }
-}
-
-AVCaptureVideoOrientation CWAVCaptureVideoOrientationForUIInterfaceOrientation(UIInterfaceOrientation interfaceOrientation) {
-    switch (interfaceOrientation) {
-        case UIInterfaceOrientationLandscapeLeft:
-            return AVCaptureVideoOrientationLandscapeLeft;
-            
-        case UIInterfaceOrientationLandscapeRight:
-            return AVCaptureVideoOrientationLandscapeRight;
-            
-        default:
-        case UIInterfaceOrientationPortrait:
-            return AVCaptureVideoOrientationPortrait;
-
-        case UIInterfaceOrientationPortraitUpsideDown:
-            return AVCaptureVideoOrientationPortraitUpsideDown;
     }
 }
 
