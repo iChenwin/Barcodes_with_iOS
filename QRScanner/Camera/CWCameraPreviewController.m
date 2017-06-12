@@ -9,6 +9,7 @@
 #import "CWCameraPreviewController.h"
 #import "CWVideoPreviewView.h"
 #import "CWAVFoundationFunctions.h"
+@class CWVideoPreviewInterestBox;
 
 @interface CWCameraPreviewController () <AVCapturePhotoCaptureDelegate, AVCaptureMetadataOutputObjectsDelegate>
 
@@ -26,6 +27,7 @@
     NSMutableDictionary     *_visibleShapes;
     
     __weak IBOutlet UIImageView *_iBox;
+    __weak IBOutlet UIView *_scanArea;
 }
 
 - (void)viewDidLoad {
@@ -458,7 +460,7 @@
         return;
     }
     
-    CGRect rectOfInterest = [_videoPreview.previewLayer metadataOutputRectOfInterestForRect:_iBox.frame];
+    CGRect rectOfInterest = [_videoPreview.previewLayer metadataOutputRectOfInterestForRect:_scanArea.frame];
     _metaDataOutput.rectOfInterest = rectOfInterest;
 }
 #pragma mark - alert

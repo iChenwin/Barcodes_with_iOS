@@ -7,19 +7,44 @@
 //
 
 #import "AppDelegate.h"
+#import "CWCameraPreviewController.h"
 
-@interface AppDelegate ()
+@interface AppDelegate () <CWCameraPreviewControllerDelegate>
 
 @end
 
 @implementation AppDelegate
+{
+    NSDataDetector *_urlDetector;
+}
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    CWCameraPreviewController *previewController = (CWCameraPreviewController *)self.window.rootViewController;
+    
+    previewController.delegate = self;
+    
+    _urlDetector = [NSDataDetector dataDetectorWithTypes:(NSTextCheckingType)NSTextCheckingTypeLink error:NULL];
+    
     return YES;
 }
 
+- (void)previewController:(CWCameraPreviewController *)previewController didScanCode:(NSString *)code ofType:(NSString *)type {
+    NSRange entireString = NSMakeRange(0, [code length]);
+    NSArray *matches = [_urlDetector matchesInString:code options:0 range:entireString];
+    
+    for (NSTextCheckingResult *match in matches) {
+        if ([[UIApplication sharedApplication] canOpenURL:match.URL]) {
+            NSLog(@"Opening URL '%@' in external browser", [match.URL absoluteString]);
+            [[UIApplication sharedApplication] openURL:match.URL options:@{} completionHandler:nil];
+            
+            break;
+        } else {
+            NSLog(@"Device cannot open URL '%@'", [match.URL absoluteString]);
+        }
+    }
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

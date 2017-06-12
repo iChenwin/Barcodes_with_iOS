@@ -24,6 +24,10 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="90X-So-6hm" customClass="CWVideoPreviewInterestBox">
                                 <rect key="frame" x="87" y="82" width="200" height="200"/>
                                 <subviews>
+                                    <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b1d-Hd-DeR">
+                                        <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scan Barcode Here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f2l-xs-uW4">
                                         <rect key="frame" x="26.5" y="174" width="147.5" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -33,9 +37,13 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="b1d-Hd-DeR" firstAttribute="leading" secondItem="90X-So-6hm" secondAttribute="leading" id="59v-GW-zZP"/>
                                     <constraint firstAttribute="height" constant="200" id="7ou-bM-rKL"/>
+                                    <constraint firstAttribute="bottom" secondItem="b1d-Hd-DeR" secondAttribute="bottom" id="FzA-kb-MCw"/>
                                     <constraint firstAttribute="width" constant="200" id="HT2-5I-Csk"/>
                                     <constraint firstItem="f2l-xs-uW4" firstAttribute="centerX" secondItem="90X-So-6hm" secondAttribute="centerX" id="L8c-zg-PkJ"/>
+                                    <constraint firstAttribute="trailing" secondItem="b1d-Hd-DeR" secondAttribute="trailing" id="gV0-iE-8Rh"/>
+                                    <constraint firstItem="b1d-Hd-DeR" firstAttribute="top" secondItem="90X-So-6hm" secondAttribute="top" id="iTQ-Tg-nJt"/>
                                     <constraint firstAttribute="bottom" secondItem="f2l-xs-uW4" secondAttribute="bottom" constant="5" id="zQ8-Oj-eAv"/>
                                 </constraints>
                             </view>
@@ -133,8 +141,10 @@
                     </view>
                     <connections>
                         <outlet property="_iBox" destination="9rW-jv-L7g" id="sZE-q3-jbb"/>
+                        <outlet property="_scanArea" destination="b1d-Hd-DeR" id="VVT-gr-PZb"/>
                         <outlet property="preview" destination="yUz-a1-DgQ" id="2Ad-U1-u1q"/>
                         <outlet property="previewImage" destination="9rW-jv-L7g" id="H6Q-0K-LPh"/>
+                        <outlet property="scanArea" destination="9rW-jv-L7g" id="TmO-3o-l1g"/>
                         <outlet property="snapButton" destination="J25-sh-4ss" id="eil-Ip-Lh2"/>
                         <outlet property="switchCamButton" destination="I5r-mx-xRT" id="SL7-Ov-WN0"/>
                         <outlet property="toggleTorchButton" destination="Yx8-My-zsW" id="EHO-TY-EKV"/>
